@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Webapp</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #ffffff;
+    background-image: url('/static/adc.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+  }
+
+  .container {
+    text-align: center;
+    margin-top: 20px; 
+  }
+
+  h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.5); 
+    padding: 10px 20px;
+    width: max-content; 
+    margin: 0 auto;
+    white-space: nowrap;
+  }
+
+  .button {
+    display: block; 
+    margin: 5px auto; 
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ffd500;
+    color: #000000;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .button:hover {
+    background-color: #ffffff;
+  }
+</style>
+</head>
+<body>
+
+<h1>ACCIDENT DETECTION AND ALERT SYSTEM</h1>
+
+<div class="container">
+    <button class="button" id="drowsinessButton">Eye Closure Behavior</button>
+    <br> 
+    <button class="button" id="laneChangeButton">Lane Change Monitoring</button>
+    <br> 
+    <button class="button" id="potholeButton">Pothole Detection</button>
+    <br>
+    <button class="button" id="speedButton">Speed Limit</button> 
+</div>
+
+<script>
+    document.getElementById('drowsinessButton').addEventListener('click', function() {
+        executePython('/run_drowsiness_detection');
+    });
+
+    document.getElementById('laneChangeButton').addEventListener('click', function() {
+        executePython('/run_lane_change_monitoring');
+    });
+
+    document.getElementById('potholeButton').addEventListener('click', function() {
+        executePython('/run_pothole_detection');
+    });
+
+    document.getElementById('speedButton').addEventListener('click', function() {
+        window.location.href = '/index.html'; 
+    });
+
+    function executePython(route) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', route, true);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                console.log('Python file executed successfully!');
+            } else {
+                console.error('Error executing Python file:', xhr.statusText);
+            }
+        };
+        xhr.onerror = function() {
+            console.error('Network error occurred while trying to execute Python file.');
+        };
+        xhr.send();
+    }
+</script>
+
+</body>
+</html>
+
